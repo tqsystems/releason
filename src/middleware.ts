@@ -64,10 +64,7 @@ export default withAuth(
  */
 export const config = {
   matcher: [
-    // Protect these routes (uncomment to enable)
-    // "/dashboard/:path*",
-    // "/profile/:path*",
-    // "/settings/:path*",
-    // "/api/protected/:path*",
+    // Protect these routes
+    "/dashboard/:path*",
   ],
 };
