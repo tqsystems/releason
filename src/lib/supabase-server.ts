@@ -287,7 +287,7 @@ export async function createRiskItems(
  * @returns Repository object
  */
 export async function getOrCreateRepository(data: {
-  repo_id: string;
+  github_repo_id: string;
   user_id: string;
   repo_name: string;
   owner: string;
@@ -300,7 +300,7 @@ export async function getOrCreateRepository(data: {
   const { data: existing } = await supabase
     .from("repositories")
     .select("*")
-    .eq("repo_id", data.repo_id)
+    .eq("github_repo_id", data.github_repo_id)
     .single();
 
   if (existing) {
@@ -388,20 +388,20 @@ export async function getOrCreateUser(
 }
 
 /**
- * Get repository by repo_id
+ * Get repository by github_repo_id
  * 
- * @param repoId - Repository ID
+ * @param githubRepoId - GitHub Repository ID
  * @returns Repository or null
  */
 export async function getRepositoryByRepoId(
-  repoId: string
+  githubRepoId: string
 ): Promise<Repository | null> {
   const supabase = getSupabaseServer();
   
   const { data: repo, error } = await supabase
     .from("repositories")
     .select("*")
-    .eq("repo_id", repoId)
+    .eq("github_repo_id", githubRepoId)
     .single();
 
   if (error) {

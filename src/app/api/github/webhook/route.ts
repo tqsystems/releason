@@ -44,26 +44,26 @@ export async function POST(request: NextRequest) {
     console.log(`[Webhook] Received ${event} event (${deliveryId})`);
 
     // Validate signature
-    const secret = process.env.GITHUB_WEBHOOK_SECRET;
-    if (!validateGitHubSignature(rawBody, signature || "", secret || "")) {
-      console.error("[Webhook] Invalid signature");
-      
-      await logWebhook({
-        event_type: event || "unknown",
-        delivery_id: deliveryId || undefined,
-        signature: signature || undefined,
-        payload: JSON.parse(rawBody),
-        headers: Object.fromEntries(request.headers.entries()),
-        processed: false,
-        success: false,
-        error_message: "Invalid webhook signature",
-      });
+const secret = process.env.GITHUB_WEBHOOK_SECRET;
+if (!validateGitHubSignature(rawBody, signature || "", secret || "")) {
+  console.error("[Webhook] Invalid signature");
+  
+  await logWebhook({
+    event_type: event || "unknown",
+    delivery_id: deliveryId || undefined,
+    signature: signature || undefined,
+    payload: JSON.parse(rawBody),
+    headers: Object.fromEntries(request.headers.entries()),
+    processed: false,
+    success: false,
+    error_message: "Invalid webhook signature",
+  });
 
-      return NextResponse.json(
-        { error: "Invalid signature" },
-        { status: 401 }
-      );
-    }
+  return NextResponse.json(
+    { error: "Invalid signature" },
+    { status: 401 }
+  );
+}    
 
     // Parse payload
     let payload: CoverageWebhookPayload;
@@ -156,7 +156,7 @@ export async function POST(request: NextRequest) {
 
     // Get or create repository
     const repo = await getOrCreateRepository({
-      repo_id: repository.id.toString(),
+      github_repo_id: repository.id.toString(),
       user_id: user.id,
       repo_name: repository.name,
       owner: repository.owner,

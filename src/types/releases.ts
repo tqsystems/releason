@@ -274,7 +274,7 @@ export interface Repository {
   /** User ID (owner) */
   user_id: string;
   /** GitHub repository ID */
-  repo_id: string;
+  github_repo_id: string;
   /** Repository name */
   repo_name: string;
   /** Owner username */
