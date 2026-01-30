@@ -2,11 +2,23 @@
 
 import { FiAlertCircle, FiCheckCircle, FiClock } from "react-icons/fi";
 
-export function ReleaseOverview() {
-  const confidenceScore = 87;
-  const riskLevel = "Medium";
-  const releaseNumber = "v2.4.0";
-  const releaseDate = "Dec 15, 2024";
+interface ReleaseOverviewProps {
+  confidenceScore: number;
+  riskLevel: "Critical" | "High" | "Medium" | "Low";
+  releaseNumber: string;
+  releaseDate: string;
+  timeToShip: string;
+  recommendation: string;
+}
+
+export function ReleaseOverview({
+  confidenceScore,
+  riskLevel,
+  releaseNumber,
+  releaseDate,
+  timeToShip,
+  recommendation,
+}: ReleaseOverviewProps) {
 
   const getRiskColor = (risk: string) => {
     switch (risk) {
@@ -118,9 +130,7 @@ export function ReleaseOverview() {
             <div>
               <h3 className="font-semibold">Recommendation</h3>
               <p className="mt-1 text-sm opacity-90">
-                Release confidence is good, but consider improving test coverage
-                for Compliance features before deploying to production.
-                Estimated time to ship: <span className="font-semibold">2h 30m</span>
+                {recommendation}
               </p>
             </div>
           </div>

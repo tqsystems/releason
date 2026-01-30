@@ -6,42 +6,38 @@ import {
   FiInfo,
   FiCheckCircle,
 } from "react-icons/fi";
+import type { RiskItem } from "@/types/releases";
 
-interface RiskItem {
-  severity: "high" | "medium" | "low" | "info";
-  title: string;
-  description: string;
+interface RiskSummaryProps {
+  risks: RiskItem[];
 }
 
-export function RiskSummary() {
-  const risks: RiskItem[] = [
-    {
-      severity: "high",
-      title: "Low Test Coverage",
-      description:
-        "Compliance module has only 58% coverage - critical for production",
-    },
-    {
-      severity: "medium",
-      title: "Approval Rules Need Testing",
-      description:
-        "73% coverage on approval rules - recommend additional edge case testing",
-    },
-    {
-      severity: "low",
-      title: "Documentation Updates",
-      description: "API documentation needs to be updated for new endpoints",
-    },
-    {
-      severity: "info",
-      title: "Performance Optimization",
-      description:
-        "Consider load testing the loan origination flow before peak season",
-    },
-  ];
+export function RiskSummary({ risks }: RiskSummaryProps) {
+  // If no risks provided, show empty state
+  if (!risks || risks.length === 0) {
+    return (
+      <div className="rounded-xl bg-white p-6 shadow-sm">
+        <div className="mb-6">
+          <h2 className="text-lg font-bold text-[#2c3e50]">Risk Summary</h2>
+          <p className="mt-1 text-sm text-gray-600">
+            Issues requiring attention before release
+          </p>
+        </div>
+        <div className="rounded-lg border-2 border-green-200 bg-green-50 p-8 text-center">
+          <FiCheckCircle className="mx-auto mb-4 h-12 w-12 text-green-600" />
+          <h3 className="mb-2 text-lg font-semibold text-green-900">
+            All Clear!
+          </h3>
+          <p className="text-sm text-green-700">
+            No significant risks detected. Your release looks good to go!
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   const getRiskConfig = (severity: string) => {
-    switch (severity) {
+    switch (severity.toLowerCase()) {
       case "high":
         return {
           icon: <FiAlertTriangle className="h-5 w-5" />,
@@ -85,8 +81,8 @@ export function RiskSummary() {
     }
   };
 
-  const highRiskCount = risks.filter((r) => r.severity === "high").length;
-  const mediumRiskCount = risks.filter((r) => r.severity === "medium").length;
+  const highRiskCount = risks.filter((r) => r.risk_level.toLowerCase() === "high").length;
+  const mediumRiskCount = risks.filter((r) => r.risk_level.toLowerCase() === "medium").length;
 
   return (
     <div className="rounded-xl bg-white p-6 shadow-sm">
@@ -116,7 +112,7 @@ export function RiskSummary() {
       {/* Risk Items */}
       <div className="space-y-4">
         {risks.map((risk, index) => {
-          const config = getRiskConfig(risk.severity);
+          const config = getRiskConfig(risk.risk_level);
           return (
             <div
               key={index}
@@ -129,7 +125,7 @@ export function RiskSummary() {
                 <div className="flex-1 min-w-0">
                   <div className="flex items-start justify-between">
                     <h3 className="text-sm font-semibold text-gray-900">
-                      {risk.title}
+                      {risk.risk_name}
                     </h3>
                     <span
                       className={`ml-2 inline-flex items-center rounded-full border px-2 py-0.5 text-xs font-medium ${config.badge}`}
@@ -148,24 +144,23 @@ export function RiskSummary() {
       </div>
 
       {/* Recommendation Section */}
-      <div className="mt-6 rounded-lg border border-[#667eea] bg-gradient-to-r from-[#667eea]/5 to-[#764ba2]/5 p-4">
-        <div className="flex items-start space-x-3">
-          <FiCheckCircle className="mt-0.5 h-5 w-5 flex-shrink-0 text-[#667eea]" />
-          <div>
-            <h3 className="text-sm font-semibold text-[#2c3e50]">
-              Recommended Action
-            </h3>
-            <p className="mt-1 text-sm text-gray-600">
-              Address the high-risk compliance coverage issue before proceeding
-              with deployment. Consider running additional integration tests and
-              scheduling a security review.
-            </p>
-            <button className="mt-3 inline-flex items-center rounded-lg bg-gradient-to-r from-[#667eea] to-[#764ba2] px-4 py-2 text-sm font-medium text-white transition-all hover:shadow-md">
-              Create Action Plan
-            </button>
+      {highRiskCount > 0 && (
+        <div className="mt-6 rounded-lg border border-[#667eea] bg-gradient-to-r from-[#667eea]/5 to-[#764ba2]/5 p-4">
+          <div className="flex items-start space-x-3">
+            <FiCheckCircle className="mt-0.5 h-5 w-5 flex-shrink-0 text-[#667eea]" />
+            <div>
+              <h3 className="text-sm font-semibold text-[#2c3e50]">
+                Recommended Action
+              </h3>
+              <p className="mt-1 text-sm text-gray-600">
+                Address the {highRiskCount} high-risk issue{highRiskCount > 1 ? "s" : ""} before proceeding
+                with deployment. Review the recommendations above and consider running
+                additional tests in affected areas.
+              </p>
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }

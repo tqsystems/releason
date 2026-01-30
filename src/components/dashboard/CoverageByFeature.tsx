@@ -1,46 +1,34 @@
 "use client";
 
 import { FiCheckCircle, FiAlertCircle, FiXCircle } from "react-icons/fi";
+import type { FeatureCoverage } from "@/types/releases";
 
-interface FeatureData {
-  name: string;
-  coverage: number;
-  status: "excellent" | "good" | "warning" | "danger";
+interface CoverageByFeatureProps {
+  features: FeatureCoverage[];
 }
 
-export function CoverageByFeature() {
-  const features: FeatureData[] = [
-    {
-      name: "Loan Origination Flow",
-      coverage: 98,
-      status: "excellent",
-    },
-    {
-      name: "Credit Check Integration",
-      coverage: 94,
-      status: "excellent",
-    },
-    {
-      name: "Approval Rules Engine",
-      coverage: 73,
-      status: "warning",
-    },
-    {
-      name: "Compliance Reporting",
-      coverage: 58,
-      status: "danger",
-    },
-    {
-      name: "Document Management",
-      coverage: 89,
-      status: "good",
-    },
-    {
-      name: "Payment Processing",
-      coverage: 91,
-      status: "excellent",
-    },
-  ];
+export function CoverageByFeature({ features }: CoverageByFeatureProps) {
+  // If no features provided, show empty state
+  if (!features || features.length === 0) {
+    return (
+      <div className="rounded-xl bg-white p-6 shadow-sm">
+        <div className="mb-6">
+          <h2 className="text-lg font-bold text-[#2c3e50]">
+            Coverage by Feature
+          </h2>
+          <p className="mt-1 text-sm text-gray-600">
+            Test coverage breakdown by module
+          </p>
+        </div>
+        <div className="py-12 text-center text-gray-500">
+          <p>No feature coverage data available yet.</p>
+          <p className="mt-2 text-sm">
+            Feature coverage will appear here once your tests include module-level metrics.
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   const getStatusConfig = (status: string, coverage: number) => {
     switch (status) {

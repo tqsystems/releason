@@ -80,37 +80,65 @@ function MetricCard({
   );
 }
 
-export function MetricsGrid() {
+interface MetricsGridProps {
+  releaseConfidence: number;
+  testCoverage: number;
+  riskLevel: "Critical" | "High" | "Medium" | "Low";
+  timeToShip: string;
+  passRate: number;
+}
+
+export function MetricsGrid({
+  releaseConfidence,
+  testCoverage,
+  riskLevel,
+  timeToShip,
+  passRate,
+}: MetricsGridProps) {
+  // Determine risk color and percentage
+  const getRiskColor = (risk: string): "green" | "yellow" | "red" => {
+    if (risk === "Low") return "green";
+    if (risk === "Medium") return "yellow";
+    return "red";
+  };
+
+  const getRiskPercentage = (risk: string): number => {
+    if (risk === "Critical") return 25;
+    if (risk === "High") return 50;
+    if (risk === "Medium") return 65;
+    return 90;
+  };
+
   const metrics = [
     {
       title: "Release Confidence",
-      value: "87%",
-      subtitle: "Above target threshold",
-      percentage: 87,
-      color: "green" as const,
+      value: `${Math.round(releaseConfidence)}%`,
+      subtitle: releaseConfidence >= 85 ? "Above target threshold" : "Below recommended level",
+      percentage: Math.round(releaseConfidence),
+      color: releaseConfidence >= 85 ? ("green" as const) : releaseConfidence >= 70 ? ("yellow" as const) : ("red" as const),
       icon: <FiTrendingUp className="h-6 w-6" />,
     },
     {
       title: "Test Coverage",
-      value: "92%",
+      value: `${Math.round(testCoverage)}%`,
       subtitle: "Overall coverage score",
-      percentage: 92,
-      color: "green" as const,
+      percentage: Math.round(testCoverage),
+      color: testCoverage >= 85 ? ("green" as const) : testCoverage >= 70 ? ("yellow" as const) : ("red" as const),
       icon: <FiShield className="h-6 w-6" />,
     },
     {
       title: "Risk Level",
-      value: "Medium",
-      subtitle: "3 areas need attention",
-      percentage: 65,
-      color: "yellow" as const,
+      value: riskLevel,
+      subtitle: `Pass rate: ${Math.round(passRate)}%`,
+      percentage: getRiskPercentage(riskLevel),
+      color: getRiskColor(riskLevel),
       icon: <FiAlertTriangle className="h-6 w-6" />,
     },
     {
       title: "Time to Ship",
-      value: "2h 30m",
+      value: timeToShip,
       subtitle: "Estimated deployment time",
-      percentage: 75,
+      percentage: 75, // Static for now
       color: "blue" as const,
       icon: <FiClock className="h-6 w-6" />,
     },
