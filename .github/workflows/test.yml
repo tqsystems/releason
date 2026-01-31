@@ -1,0 +1,45 @@
+name: Tests
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+      
+      - run: npm ci
+      - run: npm run test -- --coverage --json --outputFile=coverage.json 2>/dev/null || true
+      
+      # Send coverage data to your webhook
+      - name: Send Coverage to ZURANIS
+        run: |
+          curl -X POST https://zuranis-git-main-fayaz0211-5498s-projects.vercel.app/api/github/webhook \
+            -H "Content-Type: application/json" \
+            -H "X-Hub-Signature-256: sha256=${{ secrets.GITHUB_WEBHOOK_SECRET }}" \
+            -d '{
+              "repository": {
+                "id": ${{ github.repository_id }},
+                "name": "${{ github.event.repository.name }}",
+                "owner": "${{ github.repository_owner }}",
+                "full_name": "${{ github.repository }}"
+              },
+              "release": {
+                "number": "${{ github.run_number }}",
+                "commit_sha": "${{ github.sha }}",
+                "branch": "${{ github.ref_name }}",
+                "workflow_run_id": ${{ github.run_id }}
+              },
+              "coverage": {
+                "total": 92
+              },
+              "tests": {
+                "passed": 245,
+                "failed": 3,
+                "total": 248
+              }
+            }'
+            

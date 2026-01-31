@@ -2,6 +2,7 @@
 
 import { signIn, signOut, useSession } from "next-auth/react";
 import Image from "next/image";
+import Link from "next/link";
 
 export function Header() {
   const { data: session, status } = useSession();
@@ -9,7 +10,33 @@ export function Header() {
   return (
     <header className="border-b">
       <div className="container mx-auto flex items-center justify-between px-4 py-4">
-        <h1 className="text-xl font-bold">Zuranis</h1>
+        <div className="flex items-center gap-8">
+          <Link href="/" className="text-xl font-bold hover:text-gray-700 transition-colors">
+            Zuranis
+          </Link>
+          
+          {/* Navigation Links */}
+          <nav className="hidden md:flex items-center gap-6">
+            <Link
+              href="/"
+              className="text-sm text-gray-600 hover:text-gray-900 transition-colors"
+            >
+              Home
+            </Link>
+            <Link
+              href="/dashboard"
+              className="text-sm text-gray-600 hover:text-gray-900 transition-colors"
+            >
+              Dashboard
+            </Link>
+            <Link
+              href="/blog/release-confidence"
+              className="text-sm text-gray-600 hover:text-gray-900 transition-colors"
+            >
+              Blog
+            </Link>
+          </nav>
+        </div>
         
         <div className="flex items-center gap-4">
           {status === "loading" ? (
