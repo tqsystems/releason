@@ -97,23 +97,23 @@ export default function ReleaseConfidenceBlogPost() {
               code coverage, test pass rate, deployment frequency.
             </p>
             <p className="mb-4 text-lg font-semibold text-purple-400">
-              But they're measuring the wrong things.
+              But they&apos;re measuring the wrong things.
             </p>
             <p className="mb-4 leading-relaxed text-slate-300">
-              Here's what actually happens:
+              Here&apos;s what actually happens:
             </p>
             <div className="my-6 rounded-lg border border-slate-700 bg-slate-800/50 p-6">
               <p className="mb-2 text-slate-200">
                 <strong className="text-white">Developer on Wednesday:</strong>{" "}
-                "Coverage is 95%. Tests pass. Let's ship."
+                &quot;Coverage is 95%. Tests pass. Let&apos;s ship.&quot;
               </p>
               <p className="mb-2 text-slate-200">
                 <strong className="text-white">QA Engineer:</strong>{" "}
-                "Looks good to me?"
+                &quot;Looks good to me?&quot;
               </p>
               <p className="mb-2 text-slate-200">
                 <strong className="text-white">Tech Lead:</strong>{" "}
-                "I guess we're deploying?"
+                &quot;I guess we&apos;re deploying?&quot;
               </p>
               <p className="mt-4 text-red-400">
                 <strong>Friday at 3pm:</strong> Something breaks in production. Three services go down. 
@@ -130,11 +130,11 @@ export default function ReleaseConfidenceBlogPost() {
             <p className="mb-4 leading-relaxed text-slate-300">
               This is the uncomfortable truth:{" "}
               <span className="font-semibold text-white">
-                Testing catches bugs developers make. It doesn't catch risks.
+                Testing catches bugs developers make. It doesn&apos;t catch risks.
               </span>
             </p>
             <p className="mb-4 leading-relaxed text-slate-300">
-              Tests can't catch:
+              Tests can&apos;t catch:
             </p>
             <ul className="mb-6 space-y-2 text-slate-300">
               <li className="flex items-start">
